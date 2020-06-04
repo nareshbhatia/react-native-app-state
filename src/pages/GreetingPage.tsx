@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { useGlobalDispatch, useGlobalState } from './GlobalStateContext';
+import { useGlobalDispatch, useGlobalState } from '../contexts';
 
 export const GreetingPage = () => {
     const state = useGlobalState();

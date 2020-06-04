@@ -1,43 +1,23 @@
 import React, { useContext, useReducer } from 'react';
+import {
+    GlobalState,
+    GlobalStateAction,
+    globalStateReducer,
+} from './globalStateReducer';
 
-// ---------- State ----------
-export type GlobalState = {
-    name: string;
-};
-
-export const initialGlobalState = {
-    name: '',
-};
-
-// ---------- Actions ----------
-export interface ChangeName {
-    type: 'CHANGE_NAME';
-    payload: {
-        name: string;
-    };
-}
-
-export type GlobalStateAction = ChangeName;
 export type GlobalStateDispatch = (action: GlobalStateAction) => void;
 
-// ---------- Reducer ----------
-export const globalStateReducer = (
-    state: GlobalState,
-    action: GlobalStateAction
-): GlobalState => {
-    switch (action.type) {
-        case 'CHANGE_NAME': {
-            return { ...state, name: action.payload.name };
-        }
-    }
-};
-
 // ---------- Context ----------
-const GlobalStateContext = React.createContext<GlobalState>(initialGlobalState);
+// Note: Don't provide default value in context, it's not very useful.
+// Provide it only in Context.Provider (see below).
+// For details, see: https://kentcdodds.com/blog/how-to-use-react-context-effectively
+const GlobalStateContext = React.createContext<GlobalState | undefined>(
+    undefined
+);
 
-const GlobalDispatchContext = React.createContext<GlobalStateDispatch>(() => {
-    return;
-});
+const GlobalDispatchContext = React.createContext<
+    GlobalStateDispatch | undefined
+>(undefined);
 
 // ---------- Hooks ----------
 function useGlobalState(): GlobalState {
@@ -61,11 +41,18 @@ function useGlobalDispatch(): GlobalStateDispatch {
 }
 
 // ---------- Provider ----------
+const initialGlobalState = {
+    name: '',
+};
+
 const GlobalStateProvider: React.FC = ({ children }) => {
+    console.log('Rendering GlobalStateProvider');
+
     const [state, dispatch] = useReducer(
         globalStateReducer,
         initialGlobalState
     );
+
     return (
         <GlobalStateContext.Provider value={state}>
             <GlobalDispatchContext.Provider value={dispatch}>

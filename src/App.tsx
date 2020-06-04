@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { AppState, AppStateStatus, SafeAreaView } from 'react-native';
-import { GlobalStateProvider } from './GlobalStateContext';
-import { GreetingPage } from './GreetingPage';
+import { GlobalStateProvider } from './contexts';
+import { GreetingPage } from './pages';
 
-const App = () => {
+export const App = () => {
+    console.log('Rendering App');
+
     useEffect(() => {
         AppState.addEventListener('change', handleAppStateChange);
 
@@ -24,5 +26,3 @@ const App = () => {
         </SafeAreaView>
     );
 };
-
-export default App;
